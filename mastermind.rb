@@ -3,8 +3,8 @@
 module Mastermind
   # Mastermind Game
   class Game
-    def initialize(code)
-      @code = code
+    def initialize
+      @code = '0000'
       start_game
     end
 
@@ -62,13 +62,14 @@ module Mastermind
     end
 
     def solve
-      until @solved == true
-        @solved = solved?(trial)
-      end
+      @solved = solved?(trial) until @solved == true
+      puts "You found the code (#{@code}) in #{@attempt - 1} attempts !"
     end
 
-    def solved?(trial)
-      @code == trial.to_i
+    def solved?(answer)
+      result = @code == answer.to_i
+      puts "You did not find the code, try again #{found(answer)}" unless result
+      result
     end
 
     def trial
@@ -80,9 +81,33 @@ module Mastermind
       @attempt += 1
       code
     end
+
+    def found(answer)
+      answer = answer.split('')
+      code = @code.to_s.split('')
+      found_array = exact_match(code, answer)
+      answer.each_with_index do |val, idx|
+        if code.include?(val) && found_array[idx].zero?
+          found_array[idx] = 1
+          code[code.index(val)] = 'f'
+        end
+      end
+      found_array.sort.reverse!
+    end
+
+    def exact_match(code, answer)
+      array = [0, 0, 0, 0]
+      answer.each_with_index do |val, idx|
+        if val == code[idx]
+          array[idx] = 2
+          code[idx] = 'f'
+        end
+      end
+      array
+    end
   end
 end
 
 include Mastermind
 
-Game.new(1234)
+Game.new
