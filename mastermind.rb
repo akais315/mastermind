@@ -33,6 +33,7 @@ module Mastermind
     def initialize
       puts 'Maker initialized'
       generate_code
+      puts 'Computer yet to be implemented'
     end
 
     def generate_code
@@ -68,14 +69,14 @@ module Mastermind
 
     def solved?(answer)
       result = @code == answer.to_i
-      puts "You did not find the code, try again #{found(answer)}" unless result
+      puts "Wrong code, try again #{found(answer)}" unless result
       result
     end
 
     def trial
       code = ''
       until code.length == 4 && code.split('').all? { |char| char.to_i.between?(1, 6) }
-        puts "Attempt ##{@attempt}: What is the passord (4 numbers between 1 and 6) ?"
+        puts "Attempt ##{@attempt}: What is the password (4 numbers between 1 and 6) ?"
         code = gets.chomp
       end
       @attempt += 1
